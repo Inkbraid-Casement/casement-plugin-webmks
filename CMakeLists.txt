@@ -10,11 +10,14 @@ target_include_directories(pugixml PUBLIC third_party/pugixml)
 target_link_libraries(pugixml PRIVATE casement_options)
 
 add_library(vmware STATIC
+    src/vmware/certificate.cpp
+    src/vmware/fingerprint.cpp
     src/vmware/soap.cpp)
 target_include_directories(vmware PUBLIC src)
-target_link_libraries(vmware PUBLIC casement pugixml)
+target_link_libraries(vmware PUBLIC casement pugixml crypt32 bcrypt ws2_32)
 
 casement_test(unit_tests unit
     tests/unit/main.cpp
+    tests/unit/fingerprint_tests.cpp
     tests/unit/soap_tests.cpp)
 target_link_libraries(unit_tests PRIVATE vmware)
