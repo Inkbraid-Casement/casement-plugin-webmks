@@ -49,6 +49,69 @@ build_openssl() {
     done_ openssl
 }
 
+# A toolchain file for libraries built with CMake: MinGW-w64 compilers, and
+# headers, libraries and packages only from the prefix and MinGW itself.
+cmake_toolchain() {
+    cat > "$WORK/mingw-toolchain.cmake" <<EOF
+set(CMAKE_SYSTEM_NAME Windows)
+set(CMAKE_SYSTEM_PROCESSOR AMD64)
+set(CMAKE_C_COMPILER $HOST-gcc-posix)
+set(CMAKE_CXX_COMPILER $HOST-g++-posix)
+set(CMAKE_RC_COMPILER $HOST-windres)
+set(CMAKE_FIND_ROOT_PATH "$PREFIX" /usr/$HOST)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+EOF
+    echo "$WORK/mingw-toolchain.cmake"
+}
+
+# libjpeg only (no TurboJPEG library or tools): LibVNCClient brings its own
+# TurboJPEG wrapper around the libjpeg API.
+build_libjpeg_turbo() {
+    have libjpeg_turbo && return
+    fetch https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/3.2.0.tar.gz \
+        980dd81f425082aa6d7c9e47fef27554ce7a9ffc8e2f6e863b97d263c5c50858 libjpeg-turbo.tar.gz
+    rm -rf "$WORK/libjpeg-turbo" && mkdir -p "$WORK/libjpeg-turbo" &&
+        tar -xzf "$WORK/libjpeg-turbo.tar.gz" -C "$WORK/libjpeg-turbo" --strip-components=1
+    cmake -S "$WORK/libjpeg-turbo" -B "$WORK/libjpeg-turbo/build" -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_TOOLCHAIN_FILE="$(cmake_toolchain)" -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+        -DENABLE_SHARED=OFF -DENABLE_STATIC=ON -DWITH_TURBOJPEG=OFF -DWITH_TOOLS=OFF \
+        -DWITH_TESTS=OFF -DWITH_SIMD=ON >/dev/null
+    cmake --build "$WORK/libjpeg-turbo/build" -j"$JOBS" >/dev/null
+    cmake --install "$WORK/libjpeg-turbo/build" >/dev/null
+    rm -rf "$WORK/libjpeg-turbo"
+    done_ libjpeg_turbo
+}
+
+# LibVNCClient (and LibVNCServer, which the same build makes) with zlib and
+# libjpeg-turbo for the Tight, ZRLE and zlib encodings, and nothing that
+# would pull in further libraries: no TLS, SASL, PNG, LZO or examples. Its
+# CMakeLists asks for CMake 3.4, which CMake 4 refuses without the policy
+# minimum.
+build_libvncserver() {
+    have libvncserver && return
+    build_zlib
+    build_libjpeg_turbo
+    fetch https://github.com/LibVNC/libvncserver/archive/refs/tags/LibVNCServer-0.9.15.tar.gz \
+        62352c7795e231dfce044beb96156065a05a05c974e5de9e023d688d8ff675d7 libvncserver.tar.gz
+    rm -rf "$WORK/libvncserver" && mkdir -p "$WORK/libvncserver" &&
+        tar -xzf "$WORK/libvncserver.tar.gz" -C "$WORK/libvncserver" --strip-components=1
+    cmake -S "$WORK/libvncserver" -B "$WORK/libvncserver/build" -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_TOOLCHAIN_FILE="$(cmake_toolchain)" -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        -DBUILD_SHARED_LIBS=OFF -DWITH_ZLIB=ON -DWITH_JPEG=ON -DWITH_PNG=OFF -DWITH_LZO=OFF \
+        -DWITH_SDL=OFF -DWITH_GTK=OFF -DWITH_QT=OFF -DWITH_LIBSSHTUNNEL=OFF -DWITH_THREADS=OFF \
+        -DWITH_GNUTLS=OFF -DWITH_OPENSSL=OFF -DWITH_GCRYPT=OFF -DWITH_SYSTEMD=OFF -DWITH_FFMPEG=OFF \
+        -DWITH_TIGHTVNC_FILETRANSFER=OFF -DWITH_WEBSOCKETS=OFF -DWITH_SASL=OFF -DWITH_XCB=OFF \
+        -DWITH_EXAMPLES=OFF -DWITH_TESTS=OFF >/dev/null
+    cmake --build "$WORK/libvncserver/build" -j"$JOBS" >/dev/null
+    cmake --install "$WORK/libvncserver/build" >/dev/null
+    rm -rf "$WORK/libvncserver"
+    done_ libvncserver
+}
+
 for lib in "$@"; do
     "build_$lib"
 done
