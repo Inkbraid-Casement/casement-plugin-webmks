@@ -11,6 +11,7 @@
 
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -73,6 +74,12 @@ public:
     /// Whether a surface is mapped and no frame is in flight.
     bool idle() const { return surface_ && !in_flight_ && !requested_; }
 
+    /// Called, with the display locked, when a `frame_ack` or `surface` has
+    /// left the display idle: Casement has taken everything, so a session
+    /// that paces its source (one update request in flight) can ask for the
+    /// next picture. It must not lock the display, and should be quick.
+    void on_idle(std::function<void()> callback) { on_idle_ = std::move(callback); }
+
 private:
     Output& out_;
     std::size_t max_rects_;
@@ -86,6 +93,7 @@ private:
     bool in_flight_ = false;
     bool full_ = false;
     std::vector<std::array<std::uint32_t, 4>> rects_;
+    std::function<void()> on_idle_;
 };
 
 /// The display with its lock held, from `Host::display()`.

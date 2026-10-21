@@ -95,10 +95,12 @@ void Display::handle(const json& msg) {
         requested_ = false;
         damage_all();
         flush();
+        if (on_idle_ && idle()) on_idle_();
     } else if (type == "frame_ack") {
         if (surface_ && static_cast<std::uint32_t>(get_int(msg, "surface")) == surface_->id) {
             in_flight_ = false;
             flush();
+            if (on_idle_ && idle()) on_idle_();
         }
     }
 }
