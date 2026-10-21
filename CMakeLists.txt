@@ -45,3 +45,8 @@ casement_test(unit_tests unit
     tests/unit/target_tests.cpp
     tests/unit/vsphere_tests.cpp)
 target_link_libraries(unit_tests PRIVATE vmware)
+
+casement_test(e2e_tests e2e tests/e2e/vmware_tests.cpp)
+target_link_libraries(e2e_tests PRIVATE casement_sim casement winhttp crypt32)
+target_compile_definitions(e2e_tests PRIVATE PLUGIN_EXE=L"$<TARGET_FILE_NAME:casement-vmware>")
+add_dependencies(e2e_tests casement-vmware)
