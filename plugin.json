@@ -1,0 +1,26 @@
+{
+  "format": "casement-plugin",
+  "version": 1,
+  "id": "vmware",
+  "name": "VMware console",
+  "description": "VM consoles on ESXi and vCenter (WebMKS)",
+  "icon": "icon.png",
+  "program": "casement-vmware.exe",
+  "homepage": "https://github.com/Inkbraid/casement-plugin-webmks",
+  "capabilities": ["password", "cursor"],
+  "connections": [
+    {
+      "scheme": "vmware",
+      "name": "VMware VM console",
+      "fields": [
+        { "name": "user", "label": "User", "part": "user", "type": "text", "required": true, "placeholder": "administrator@vsphere.local" },
+        { "name": "host", "label": "vCenter or ESXi host", "part": "host", "type": "text", "required": true, "placeholder": "vcenter.example.com" },
+        { "name": "port", "label": "Port", "part": "port", "type": "number", "placeholder": "443" },
+        { "name": "vm", "label": "VM name or path", "part": "path", "type": "text", "required": true, "placeholder": "DC1/vm/web-01" },
+        { "name": "thumbprint", "label": "Certificate SHA-256", "part": "query", "type": "text", "placeholder": "AB:CD:…" },
+        { "name": "keys", "label": "Keyboard", "part": "query", "type": "choice", "default": "auto",
+          "choices": [ { "value": "auto", "label": "Scancodes if supported" }, { "value": "keysyms", "label": "Keysyms (US layout)" } ] }
+      ]
+    }
+  ]
+}
