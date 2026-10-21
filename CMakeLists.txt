@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.24)
 project(casement-plugin-webmks VERSION 0.1.0 LANGUAGES CXX)
 
+# MSVC builds link vcpkg's static libraries (triplet x64-windows-static),
+# so the C runtime is static too: one exe, no runtime DLLs to ship.
+if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
 include(cmake/casement.cmake)
 enable_testing()
 

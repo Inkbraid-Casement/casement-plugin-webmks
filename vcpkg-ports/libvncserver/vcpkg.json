@@ -1,0 +1,19 @@
+{
+  "name": "libvncserver",
+  "version": "0.9.15",
+  "description": "LibVNCClient (and LibVNCServer), built with zlib and libjpeg-turbo only",
+  "homepage": "https://github.com/LibVNC/libvncserver",
+  "license": "GPL-2.0-or-later",
+  "dependencies": [
+    "libjpeg-turbo",
+    "zlib",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}
