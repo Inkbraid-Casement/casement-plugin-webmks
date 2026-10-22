@@ -1,0 +1,9 @@
+{
+  "name": "casement-plugin-webmks",
+  "version": "0.1.0",
+  "dependencies": ["libvncserver"],
+  "builtin-baseline": "11121428426dfd091ed52a01288b98d79da71671",
+  "vcpkg-configuration": {
+    "overlay-ports": ["./vcpkg-ports"]
+  }
+}
