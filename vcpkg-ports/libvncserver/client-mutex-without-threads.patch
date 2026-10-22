@@ -1,0 +1,12 @@
+--- a/include/rfb/rfbclient.h
++++ b/include/rfb/rfbclient.h
+@@ -471,7 +471,9 @@
+ 	 * Mutex to protect concurrent TLS read/write.
+ 	 * For internal use only.
+ 	 */
++#if defined(LIBVNCSERVER_HAVE_LIBPTHREAD) || defined(LIBVNCSERVER_HAVE_WIN32THREADS)
+ 	MUTEX(tlsRwMutex);
++#endif
+ 
+ 	rfbBool requestedResize;
+         /**

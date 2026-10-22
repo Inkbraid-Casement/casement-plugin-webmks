@@ -8,6 +8,10 @@ vcpkg_from_github(
     REF LibVNCServer-0.9.15
     SHA512 3ad7e14eef3b591574714e320257ac465778e05bd157ddff09e48b990f35890bfa6883ce4ac027fcb08dccd96f721117d56aaee681482f7643cfee9adc59804b
     HEAD_REF master
+    PATCHES
+        # Without threads, MUTEX() expands to nothing and leaves a bare ";"
+        # in struct _rfbClient, which MSVC's C compiler rejects.
+        client-mutex-without-threads.patch
 )
 
 vcpkg_cmake_configure(
