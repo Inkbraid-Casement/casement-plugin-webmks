@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.0 (2026-10-23)
 
 - `vmware://` connections to VM consoles on ESXi and vCenter Server through
   the vSphere Web Services API (SOAP): login, VM by inventory path, managed
