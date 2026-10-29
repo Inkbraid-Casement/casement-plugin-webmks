@@ -31,7 +31,7 @@ See [CHANGELOG.md](CHANGELOG.md).
 ## Installing
 
 Download the zip for the latest release from this repository's
-[Releases](https://github.com/Inkbraid/casement-plugin-webmks/releases) and
+[Releases](https://github.com/Inkbraid-Casement/casement-plugin-webmks/releases) and
 unpack it so that you get
 
 ```
@@ -285,5 +285,5 @@ Third-party code:
 This software is based in part on the work of the Independent JPEG Group.
 
 `docs/plugin-protocol.md` is a copy of the
-[Casement plugin protocol](https://github.com/Inkbraid/casement-plugin-protocol),
+[Casement plugin protocol](https://github.com/Inkbraid-Casement/casement-plugin-protocol),
 licensed CC BY 4.0.

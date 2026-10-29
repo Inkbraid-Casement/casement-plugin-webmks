@@ -1,4 +1,4 @@
-module github.com/Inkbraid/casement-plugin-webmks/tools/fake-esxi
+module github.com/Inkbraid-Casement/casement-plugin-webmks/tools/fake-esxi
 
 go 1.25.0
 

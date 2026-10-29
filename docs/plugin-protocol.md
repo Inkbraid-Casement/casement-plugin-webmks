@@ -1,7 +1,7 @@
 # Casement plugin protocol, version 1
 
 > A copy of the protocol from
-> [Inkbraid/casement-plugin-protocol](https://github.com/Inkbraid/casement-plugin-protocol),
+> [Inkbraid-Casement/casement-plugin-protocol](https://github.com/Inkbraid-Casement/casement-plugin-protocol),
 > licensed CC BY 4.0. The authoritative copy is there.
 
 A protocol plugin adds a connection type that Casement doesn't support
@@ -16,7 +16,7 @@ Plugins and Casement are separate programs that communicate only through
 this protocol. A plugin can use any licence, and Casement works the same
 without any plugins installed.
 
-[`examples/mock-plugin/`](../examples/mock-plugin/) is a complete plugin in
+[`examples/mock-plugin/`](https://github.com/Inkbraid-Casement/casement-plugin-protocol/tree/main/examples/mock-plugin) is a complete plugin in
 Python. It's used by Casement's tests and is a good starting point.
 
 ## Installation
@@ -48,7 +48,7 @@ at startup.
   "icon": "icon.png",
   "program": "casement-rustdesk.exe",
   "args": [],
-  "homepage": "https://github.com/Inkbraid/casement-plugin-rustdesk",
+  "homepage": "https://github.com/Inkbraid-Casement/casement-plugin-rustdesk",
   "capabilities": ["password", "clipboard", "cursor"],
   "connections": [
     {
